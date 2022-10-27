@@ -354,6 +354,14 @@ section {
   font-size: 26px;
   color: #728394;
 }
+
+.about p {
+  font-size: 20px;
+  color: #000000;
+  text-align: center;
+
+}
+
 .about .content ul {
   list-style: none;
 
@@ -381,6 +389,13 @@ section {
 }
 .section-title h2{
   font-size: 23px;
+}
+
+.about p {
+  font-size: 15px;
+  color: #000000;
+  text-align: center;
+
 }
 
 }
