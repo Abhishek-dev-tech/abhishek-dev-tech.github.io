@@ -558,6 +558,8 @@ text-decoration: underline;
     position: relative;
     width: 300px;
     height: 300px;
+    max-width: 100%;
+    height: auto;
   }
 
   .container h3{
