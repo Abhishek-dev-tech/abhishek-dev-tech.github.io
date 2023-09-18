@@ -21,6 +21,79 @@ h1, h2, h3, h4, h5, h6 {
   font-family: "Raleway", sans-serif;
 }
 
+
+
+
+.tab-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.tab {
+  background-color: rgb(255, 255, 255); /* Darker background color on hover */
+  border: 2px solid #838383; /* Border properties (adjust as needed) */
+  color: #000000; /* Text color */
+  padding: 10px 20px;
+  cursor: pointer;
+  margin: 0 10px; /* Spacing between buttons */
+  transition: background-color 0.3s ease; /* Smooth transition on hover */
+}
+
+/* Hover effect for the tab buttons */
+.tab:hover {
+  background-color: #838383; /* Background color */
+  color: #fff; /* Text color */
+  border: 2px solid #838383; /* Border properties (adjust as needed) */
+}
+
+/* Active (selected) tab style */
+.tab.active {
+  background-color: #838383; /* Background color */
+  color: #fff; /* Text color */
+  border: 2px solid #838383; /* Border properties (adjust as needed) */
+}
+
+/* Style for the tab content */
+.tab-content {
+  display: none;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+.centered-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  text-align: center;
+  padding: 20px; /* Adjust the padding as needed */
+}
+
+/* Style for the tab container wrapper */
+.tab-container-wrapper {
+  border: 10px solid #838383; /* Border properties (adjust as needed) */
+  padding: 100px; /* Add some padding inside the border for spacing */
+}
+
+
+@media (max-width: 992px) {
+  .tab-container-wrapper {
+    border: 3px solid #838383; /* Border properties (adjust as needed) */
+    padding: 10px; /* Add some padding inside the border for spacing */
+  }
+
+  .tab {
+    padding: 5px 10px;
+    cursor: pointer;
+    margin: 0 5px; /* Spacing between buttons */
+    transition: background-color 0.3s ease; /* Smooth transition on hover */
+  }
+}
+
+
 /*--------------------------------------------------------------
 # Back to top button
 --------------------------------------------------------------*/
