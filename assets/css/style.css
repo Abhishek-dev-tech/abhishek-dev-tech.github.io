@@ -36,6 +36,7 @@ h1, h2, h3, h4, h5, h6 {
   cursor: pointer;
   margin: 0 10px; /* Spacing between buttons */
   transition: background-color 0.3s ease; /* Smooth transition on hover */
+  transition: transform 0.3s ease;
 }
 
 /* Hover effect for the tab buttons */
@@ -43,6 +44,7 @@ h1, h2, h3, h4, h5, h6 {
   background-color: #838383; /* Background color */
   color: #fff; /* Text color */
   border: 2px solid #838383; /* Border properties (adjust as needed) */
+  transform: scale(1.04);
 }
 
 /* Active (selected) tab style */
@@ -93,6 +95,59 @@ h1, h2, h3, h4, h5, h6 {
   height: 40px;
   animation: spin 1s linear infinite;
   z-index: 1;
+}
+
+.video iframe{
+margin-top: -100px;
+box-shadow: 0px 8px 12px rgba(0, 0, 0, 0.4);
+}
+
+@media (max-width: 1250px) {
+  .video iframe {
+    position: relative;
+    width: 420px;
+    height: 236px;
+    margin-top: -100px;
+  }
+}
+
+.shadow
+{
+  box-shadow: 0px 8px 12px rgba(0, 0, 0, 1);
+}
+
+.shadowhover{
+  box-shadow: none;
+
+  transition: transform 0.3s ease
+}
+
+.shadowhover:hover{
+  box-shadow: 0px 6px 10px rgba(0, 0, 0, .5);
+  transform: scale(1.035);
+}
+
+@media (max-width: 992px) {
+  .video iframe {
+    position: relative;
+    width: 315px;
+    height: 177px;
+    margin-top: -80px;
+  }
+
+  .shadowhover:hover{
+    box-shadow: none;
+    transform: scale(1);
+  }
+}
+
+@media (max-width: 340px) {
+  .video iframe {
+    position: relative;
+    width: 256px;
+    height: 144px;
+    margin-top: -80px;
+  }
 }
 
 @keyframes spin {
@@ -440,6 +495,13 @@ section {
   margin-bottom: 0;
 }
 
+.about p {
+  text-align: justify; /* Justify text for even alignment */
+  line-height: 1.5; /* Adjust line height for better readability */
+  margin: 0 auto; /* Center the container horizontally */
+  max-width: 1000px; /* Set a maximum width for the container */
+}
+
 /*--------------------------------------------------------------
 # About
 --------------------------------------------------------------*/
@@ -453,7 +515,6 @@ section {
 .about p {
   font-size: 20px;
   color: #000000;
-  text-align: center;
 
 }
 
@@ -637,12 +698,21 @@ text-decoration: underline;
 
 }
 
+.text-center iframe {
+
+  box-shadow: 0px 8px 12px rgba(0, 0, 0, 0.5);
+}
+.text-center img {
+  box-shadow: 0px 8px 12px rgba(0, 0, 0, 0.5);
+}
+
 
 @media (max-width: 992px){
   .text-center iframe {
     position: relative;
     width: 315px;
     height: 180px;
+
   }
   .portfolio-section-bg
   {
@@ -655,6 +725,7 @@ text-decoration: underline;
     height: 300px;
     max-width: 100%;
     height: auto;
+    box-shadow: 0px 8px 12px rgba(0, 0, 0, 0.4);
   }
 
   .container h3{
