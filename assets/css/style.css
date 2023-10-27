@@ -659,7 +659,7 @@ section {
 
 .project-heading {
   font-size: 25px;
-  margin-top: 100px;
+  margin-top: 30px;
   user-select: none;
   color: rgb(0, 0, 0);
 }
@@ -701,9 +701,11 @@ text-decoration: underline;
 .text-center iframe {
 
   box-shadow: 0px 8px 12px rgba(0, 0, 0, 0.5);
+  margin-bottom: 30px;
 }
 .text-center img {
   box-shadow: 0px 8px 12px rgba(0, 0, 0, 0.5);
+  margin-bottom: 30px;
 }
 
 
