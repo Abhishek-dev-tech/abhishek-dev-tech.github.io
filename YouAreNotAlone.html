@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>You are not alone</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit&display=swap" rel="stylesheet">
+
+    <link href="assets/css/projects.css" rel="stylesheet">
+    <link rel="stylesheet" href="prism.css" />
+    <link href="assets/img/YRNA.png" rel="icon">
+</head>
+<body>
+    <div class="header-container">
+        <div class="head1">
+            <h1><a href="index.html" target="_blank">Abhishek Joshi</a></h1>
+            <p>Game Programmer</p>
+        </div>
+        <div class="head2">
+            <br><a href="Resume Abhishek Joshi.pdf" class="button"target="_blank">Resume</a>
+        </div>
+    </div>
+
+    <div id="video-container">
+        <video id="project-video" controls>
+            <!-- Add your video source here -->
+            <source src="assets/videos/YANA_Trim.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+    </div>
+    <h2>You are not alone</h2>
+    <div class="column-container">
+        <div class="column">
+            <h2>About</h2>
+            <p>This is a 2d platform game where you have to clear obstacles to complete the levels but you are not alone in your journey. </p>
+                <p>You can anywhere switch between your second view to help your first view to clear the level but you have to be quick, you have limited time to clear a level or the level will reset.    
+            </p>
+        </div>
+        <div class="column">
+            <h2>Project Info</h2>
+            <ul>
+            <li>Role: Game Programming</li>
+            <li>Team Size: 2</li>
+            <li>Time Frame: 48 hours</li>
+            <li>Engine: Unity Engine</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="paragraph-container">
+        <h2>My Role</h2>
+        <p>This game was made for BYOG GameJam 2021, I mostly focused on <b>character movement</b> and <b>character switching</b> while the other teammate done the dialoag system and maintain GameManager and UIManager.</p>
+        <p>While working on this project my main focuse is to create the player movenemt feels fun. To look player movement good we changed few things like while jumping we shrinked the scale in Y axis and while going left amd right we tilted(changed rotation) the player in Z axis</p>
+        <p>The idea of two players comes with the theme of the game jam which is Two Views, While making the two players playable in their own space we faced many problems.</p>
+
+        <br><h2>Code snippets</h2>
+
+        <div class="code-container">
+            <button class="code-toggle" onclick="toggleCode('snippet1')">PlayerMovement.cs</button>
+            <div class="code-content" id="snippet1">
+                <pre>
+                    <code class="language-csharp">
+
+                        private void FixedUpdate()
+                        {
+                            SlowDown();
+                    
+                            if (!Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.D))
+                            {
+                                moving = false;
+                                rb.gameObject.transform.rotation = Quaternion.Euler(0, 0, 0);
+                                if (winding)
+                                    Move(0);
+                            }
+                    
+                            if (Input.GetKey(KeyCode.Space) && (GameManager.instance.gameState == GameManager.GameState.Playing || GameManager.instance.gameState == GameManager.GameState.Player2))
+                                Jump();
+                    
+                            if (Input.GetKey(KeyCode.A) && (GameManager.instance.gameState == GameManager.GameState.Playing || GameManager.instance.gameState == GameManager.GameState.Player2))
+                            {
+                                Move(-1);
+                                rb.gameObject.transform.rotation = Quaternion.Euler(0,0,15);
+                            }
+                    
+                            if (Input.GetKey(KeyCode.D) && (GameManager.instance.gameState == GameManager.GameState.Playing || GameManager.instance.gameState == GameManager.GameState.Player2))
+                            {
+                                Move(1);
+                                rb.gameObject.transform.rotation = Quaternion.Euler(0, 0, -15);
+                            }
+                        }
+                    
+                        public void Move(int dir)
+                        {
+                            moving = true;
+                    
+                            float xVel = rb.velocity.x;
+                    
+                            if (xVel < maxMoveSpeed && dir > 0)
+                            {
+                                rb.AddForce(moveSpeed * Time.deltaTime * Vector2.right * dir);
+                            }
+                            else if (xVel > -maxMoveSpeed && dir < 0)
+                            {
+                                rb.AddForce(moveSpeed * Time.deltaTime * Vector2.right * dir);
+                            }
+                    
+                            if (xVel > 0.2f && dir < 0)
+                                rb.AddForce(moveSpeed * 3.2f * Time.deltaTime * -Vector2.right);
+                    
+                            if (xVel < 0.2f && dir > 0)
+                                rb.AddForce(moveSpeed * 3.2f * Time.deltaTime * Vector2.right);
+                    
+                        }
+                    
+                        private void Jump()
+                        {
+                            if (!grounded)
+                                return;
+                    
+                            grounded = false;
+                            AudioManager.instance.play("Jump");
+                    
+                            rb.velocity = new Vector2(rb.velocity.x, 0);
+                            rb.AddForce(Vector2.up * jumpForce);
+                    
+                            rb.gameObject.transform.localScale = new Vector3(transform.localScale.x, 2, 1f);
+                    
+                            winding = false;
+                        }
+                    
+                    
+                        public void SlowDown()
+                        {
+                            if (moving) return;
+                    
+                            //If no key pressed but still moving, slow down player
+                            if (rb.velocity.x > 0.2f)
+                                rb.AddForce(moveSpeed * Time.deltaTime * -Vector2.right);
+                    
+                            else if (rb.velocity.x < -0.2f)
+                                rb.AddForce(moveSpeed * Time.deltaTime * Vector2.right);
+                        }
+                    
+                        public void CheckWhichPlayerIsActive()
+                        {
+                            if (player1.active)
+                                rb = player1.GetRb();
+                            else
+                                rb = player2.GetRb();
+                        }
+
+                    </code>
+                </pre>
+            </div>
+        </div>
+
+
+
+        <div class="code-container">
+            <button class="code-toggle" onclick="toggleCode('snippet2')">PlayerSwitching.cs</button>
+            <div class="code-content" id="snippet2">
+                <pre>
+                    <code class="language-csharp">
+
+                        private void OnTriggerEnter2D(Collider2D collision)
+                        {
+                            if (collision.gameObject.layer == LayerMask.NameToLayer("Ground") || collision.gameObject.layer == LayerMask.NameToLayer("Player"))
+                            {
+                                PlayerController.instance.grounded = true;
+                            }
+                        }
+                    
+                        public void UnActive()
+                        {
+                            rb.bodyType = RigidbodyType2D.Kinematic;
+                            rb.velocity = Vector2.zero;
+                            GetComponent<SpriteRenderer>().color = GameManager.instance.playerFadeColor;
+                            active = false;
+                        }    
+                        
+                        public void Active()
+                        {
+                            rb.bodyType = RigidbodyType2D.Dynamic;
+                            rb.velocity = Vector2.zero;
+                            GetComponent<SpriteRenderer>().color = new Color(255, 255, 255, 255);
+                            CameraMovement.instance.target = gameObject.transform;
+                            active = true;
+                        }
+
+                    </code>
+                </pre>
+            </div>
+        </div>
+
+        <br><h2>What I Learned</h2>
+        <p>I gained valuable skills in time management and improved my communication with team members during a 48-hour game development project. Specifically, when working on the player movement aspect, effective communication was crucial. Planning was essential, and we successfully executed our plan to meet the tight deadline. Overall, the experience taught me a lot.</p>
+
+        <!-- Add more paragraphs and headings as needed -->
+        </br>
+
+        <div class="gamelink">
+            <iframe frameborder="0" src="https://itch.io/embed/1247526?linkback=true&amp;border_width=0&amp;bg_color=404040&amp;fg_color=eeeeee&amp;link_color=fa5c5c&amp;border_color=363636" width="550" height="165"><a href="https://abhishek-29.itch.io/you-are-not-alone">You Are Not Alone by Abhishek, Abhay_Joshi</a></iframe>   
+        </div>
+    </div>
+
+    <script src="prism.js"></script>
+
+   <script>
+        function toggleCode(snippetId) {
+            var codeSnippet = document.getElementById(snippetId);
+            codeSnippet.classList.toggle('active');
+        }
+    </script>
+
+</body>
+</html>

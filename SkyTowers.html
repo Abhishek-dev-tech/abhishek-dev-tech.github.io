@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sky Towers</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit&display=swap" rel="stylesheet">
+
+    <link href="assets/css/projects.css" rel="stylesheet">
+    <link rel="stylesheet" href="prism.css" />
+    <link href="assets/img/YRNA.png" rel="icon">
+</head>
+<body>
+    <div class="header-container">
+        <div class="head1">
+            <h1><a href="index.html" target="_blank">Abhishek Joshi</a></h1>
+            <p>Game Programmer</p>
+        </div>
+        <div class="head2">
+            <br><a href="Resume Abhishek Joshi.pdf" class="button"target="_blank">Resume</a>
+        </div>
+    </div>
+
+    <div id="video-container">
+        <video id="project-video" controls>
+            <!-- Add your video source here -->
+            <source src="assets/videos/SK_Trim.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+    </div>
+    <h2>Sky Towers</h2>
+    <div class="column-container">
+        <div class="column">
+            <h2>About</h2>
+            <p>This is a 3d first person game where you have to complete the level while solving puzzle. </p>
+            <p></p>
+        </div>
+        <div class="column">
+            <h2>Project Info</h2>
+            <ul>
+            <li>Role: Game Programming</li>
+            <li>Team Size: 2</li>
+            <li>Time Frame: 7 days</li>
+            <li>Engine: Unity Engine</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="paragraph-container">
+        <h2>My Role</h2>
+        <p>This game was made for 1 week GameJam 2021, I mostly focused on <b>character movement</b> and character <b>grabbing mechanism</b>.</p>
+        <p>The most challenging part is to create grabbing mechanism to grab objects and enemies in the game, Grabbing mechanism made using <b>Spring Joint</b> component in unity and the values of the components like connectedAnchor, minDistance, maxDistance, damper, spring, massscale are directly changed through the script. </p>
+
+        <br><h2>Code snippets</h2>
+
+        <div class="code-container">
+            <button class="code-toggle" onclick="toggleCode('snippet1')">PlayerGrabber.cs</button>
+            <div class="code-content" id="snippet1">
+                <pre>
+                    <code class="language-csharp">
+
+                        private void StartGrab()
+                        {
+                            RaycastHit[] array = Physics.RaycastAll(playerCam.transform.position, playerCam.transform.forward, 8f, whatIsGrabbable);
+                            if (array.Length < 1)
+                            {
+                                return;
+                            }
+                            int num = 0;
+                            while (true)
+                            {
+                                if (num < array.Length)
+                                {
+                                    print("testing on: " + array[num].collider.gameObject.layer);
+                                    if ((bool)array[num].transform.GetComponent<Rigidbody>())
+                                    {
+                                        break;
+                                    }
+                                    num++;
+                                    continue;
+                                }
+                                return;
+                            }
+                            objectGrabbing = array[num].transform.GetComponent<Rigidbody>();
+                            grabPoint = array[num].point;
+                            grabJoint = objectGrabbing.gameObject.AddComponent<SpringJoint>();
+                            grabJoint.autoConfigureConnectedAnchor = false;
+                            grabJoint.minDistance = 0f;
+                            grabJoint.maxDistance = 0f;
+                            grabJoint.damper = 4f;
+                            grabJoint.spring = 40f;
+                            grabJoint.massScale = 5f;
+                            objectGrabbing.angularDrag = 5f;
+                            objectGrabbing.drag = 1f;
+                            previousLookdir = playerCam.transform.forward;
+                            grabLr = objectGrabbing.gameObject.AddComponent<LineRenderer>();
+                            grabLr.positionCount = 2;
+                            grabLr.startWidth = 0.05f;
+                            grabLr.material = new Material(Shader.Find("Sprites/Default"));
+                            grabLr.numCapVertices = 10;
+                            grabLr.numCornerVertices = 10;
+                        }
+                        private void HoldGrab()
+                        {
+                            grabJoint.connectedAnchor = playerCam.transform.position + playerCam.transform.forward * 5.5f;
+                            grabLr.startWidth = 0f;
+                            grabLr.endWidth = 0.0075f * objectGrabbing.velocity.magnitude;
+                            previousLookdir = playerCam.transform.forward;
+                        }
+                    
+                        private void StopGrab()
+                        {
+                            Destroy(grabJoint);
+                            Destroy(grabLr);
+                            objectGrabbing.angularDrag = 0.05f;
+                            objectGrabbing.drag = 0f;
+                            objectGrabbing = null;
+                        }
+                        private void DrawGrabbing()
+                        {
+                            if ((bool)objectGrabbing)
+                            {
+                                myGrabPoint = Vector3.Lerp(myGrabPoint, objectGrabbing.position, Time.deltaTime * 45f);
+                                myHandPoint = Vector3.Lerp(myHandPoint, grabJoint.connectedAnchor, Time.deltaTime * 45f);
+                                grabLr.SetPosition(0, myGrabPoint);
+                                grabLr.SetPosition(1, myHandPoint);
+                            }
+                        }
+
+                    </code>
+                </pre>
+            </div>
+        </div>
+
+
+
+        <div class="code-container">
+            <button class="code-toggle" onclick="toggleCode('snippet2')">PlayerMovement.cs</button>
+            <div class="code-content" id="snippet2">
+                <pre>
+                    <code class="language-csharp">
+
+                        private void Movement() {
+                            //Extra gravity
+                            rb.AddForce(Vector3.down * Time.deltaTime * 10);
+                            
+                            //Find actual velocity relative to where player is looking
+                            Vector2 mag = FindVelRelativeToLook();
+                            float xMag = mag.x, yMag = mag.y;
+                    
+                            //Counteract sliding and sloppy movement
+                            CounterMovement(x, y, mag);
+                            
+                            //If holding jump && ready to jump, then jump
+                            if (readyToJump && jumping) Jump();
+                    
+                            //Set max speed
+                            float _maxSpeed = maxSpeed;
+                            
+                            //If sliding down a ramp, add force down so player stays grounded and also builds speed
+                            if (crouching && grounded && readyToJump) {
+                                rb.AddForce(Vector3.down * Time.deltaTime * 3000);
+                                return;
+                            }
+                            
+                            //If speed is larger than maxspeed, cancel out the input so you don't go over max speed
+                            if (x > 0 && xMag > _maxSpeed) x = 0;
+                            if (x < 0 && xMag < -_maxSpeed) x = 0;
+                            if (y > 0 && yMag > _maxSpeed) y = 0;
+                            if (y < 0 && yMag < -_maxSpeed) y = 0;
+                    
+                            //Some multipliers
+                            float multiplier = 1f, multiplierV = 1f;
+                            
+                            // Movement in air
+                            if (!grounded) {
+                                multiplier = 0.5f;
+                                multiplierV = 0.5f;
+                            }
+                            
+                            // Movement while sliding
+                            if (grounded && crouching) multiplierV = 0f;
+                    
+                            //Apply forces to move player
+                            rb.AddForce(orientation.transform.forward * y * moveSpeed * Time.deltaTime * multiplier * multiplierV);
+                            rb.AddForce(orientation.transform.right * x * moveSpeed * Time.deltaTime * multiplier);
+                        }
+                    
+                        private void Jump() {
+                            if (grounded && readyToJump) {
+                                readyToJump = false;
+                    
+                                //Add jump forces
+                                rb.AddForce(Vector2.up * jumpForce * 1.5f);
+                                rb.AddForce(normalVector * jumpForce * 0.5f);
+                                
+                                //If jumping while falling, reset y velocity.
+                                Vector3 vel = rb.velocity;
+                                if (rb.velocity.y < 0.5f)
+                                    rb.velocity = new Vector3(vel.x, 0, vel.z);
+                                else if (rb.velocity.y > 0) 
+                                    rb.velocity = new Vector3(vel.x, vel.y / 2, vel.z);
+                                
+                                Invoke(nameof(ResetJump), jumpCooldown);
+                            }
+                        }
+                        
+                        private void ResetJump() {
+                            readyToJump = true;
+                        }
+                        
+                        private float desiredX;
+                        private void Look() {
+                            float mouseX = Input.GetAxis("Mouse X") * sensitivity * Time.fixedDeltaTime * sensMultiplier;
+                            float mouseY = Input.GetAxis("Mouse Y") * sensitivity * Time.fixedDeltaTime * sensMultiplier;
+                    
+                            //Find current look rotation
+                            Vector3 rot = playerCam.transform.localRotation.eulerAngles;
+                            desiredX = rot.y + mouseX;
+                            
+                            //Rotate, and also make sure we dont over- or under-rotate.
+                            xRotation -= mouseY;
+                            xRotation = Mathf.Clamp(xRotation, -90f, 90f);
+                            actualWallRotation = Mathf.SmoothDamp(actualWallRotation, wallRunRotation, ref wallRotationVel, 0.2f);
+                            cameraRot = new Vector3(xRotation, desiredX, actualWallRotation);
+                            //Perform the rotations
+                            playerCam.transform.localRotation = Quaternion.Euler(xRotation, desiredX, 0);
+                            orientation.transform.localRotation = Quaternion.Euler(0, desiredX, 0);
+                        }
+
+                    </code>
+                </pre>
+            </div>
+        </div>
+
+        <br><h2>What I Learned</h2>
+        <p>Gameplay-wise I learned lot of new things like Joints, PostProcessing effects, creating first person movement and interacting with Ragdoll physics.</p>
+
+        <!-- Add more paragraphs and headings as needed -->
+    </br>
+        <div class="gamelink">
+            <iframe frameborder="0" src="https://itch.io/embed/1288068?linkback=true&amp;bg_color=404040&amp;fg_color=eeeeee&amp;link_color=fa5c5c&amp;border_color=363636" width="552" height="167"><a href="https://abhay-joshi.itch.io/sky-towers">Sky Towers by Abhishek</a></iframe>
+        </div>
+
+    </div>
+
+    <script src="prism.js"></script>
+
+    <script>
+        function toggleCode(snippetId) {
+            var codeSnippet = document.getElementById(snippetId);
+            codeSnippet.classList.toggle('active');
+        }
+    </script>
+
+</body>
+</html>

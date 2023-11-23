@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2D Plane Shooter</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit&display=swap" rel="stylesheet">
+
+    <link href="assets/css/projects.css" rel="stylesheet">
+    <link rel="stylesheet" href="prism.css" />
+    <link href="assets/img/YRNA.png" rel="icon">
+</head>
+<body>
+    <div class="header-container">
+        <div class="head1">
+            <h1><a href="index.html" target="_blank">Abhishek Joshi</a></h1>
+            <p>Game Programmer</p>
+        </div>
+        <div class="head2">
+            <br><a href="Resume Abhishek Joshi.pdf" class="button"target="_blank">Resume</a>
+            <a href="https://github.com/Abhishek-dev-tech/2d-Plane-Shooter" class="button" target="_blank">Github Link</a>
+        </div>
+    </div>
+
+    <div id="video-container">
+        <video id="project-video" controls>
+            <!-- Add your video source here -->
+            <source src="assets/videos/2DPlaneShooter.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+    </div>
+    <h2>2D Plane Shooter</h2>
+    <div class="column-container">
+        <div class="column">
+            <h2>About</h2>
+            <p>This is a 2d Plane Shooter game where you have survive from enemy planes. You can use bullets and missiles to attack enemy and can use flares for defence.</p>
+            <p></p>
+        </div>
+        <div class="column">
+            <h2>Project Info</h2>
+            <ul>
+            <li>Role: Game Programming</li>
+            <li>Team Size: 1</li>
+            <li>Time Frame: 3 weeks</li>
+            <li>Engine: C++ and SDL2</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="paragraph-container">
+        <h2>My Role</h2>
+        <p>In this Game <b>Entity</b> works as a GameObject that contains position, scale. It also contains SetPos, SetScale and Destroy function to handle the Entity.</p>
+        <p>Every object is inherited from <b>Entity</b> class that provides them to renderer on screen, Change position and scale ability.</p>
+        <p>The game consists three types of enemies SmallEnemy, MediumEnemy and BigEnemies all are inherited from <b>Enemy</b> class. ObjectSpawner.cpp is responsible for spawning enemies, it uses <b>std::vector</b> to store enemies types.</p>
+
+        <br><h2>Code snippets</h2>
+
+        <div class="code-container">
+            <button class="code-toggle" onclick="toggleCode('snippet1')">Entity.cpp</button>
+            <div class="code-content" id="snippet1">
+                <pre>
+                    <code class="language-csharp">
+
+                        Entity::Entity(Vector2f p_pos, SDL_Texture* p_tex, Vector2f p_scale)
+                            :pos(p_pos), tex(p_tex), scale(p_scale)
+                        {
+                            SDL_QueryTexture(tex, NULL, NULL, &currentFrame.w, &currentFrame.h);
+
+                            currentFrame.x = 0;
+                            currentFrame.y = 0;
+
+                            destroy = false;
+                        }
+
+                        void Entity::Update()
+                        {
+                            dst.x = GetPos().x - currentFrame.w / 2 * GetScale().x;
+                            dst.y = GetPos().y - currentFrame.h / 2 * GetScale().y;
+                            dst.w = GetScale().x * currentFrame.w;
+                            dst.h = GetScale().y * currentFrame.h;
+                        }
+
+                        void Entity::SetPos(Vector2f _pos)
+                        {
+                            pos = _pos;
+                        }
+
+                        void Entity::SetScale(Vector2f _scale)
+                        {
+                            scale = _scale;
+                        }
+
+                        void Entity::Destroy()
+                        {
+                            destroy = true;
+                        }
+
+
+
+                    </code>
+                </pre>
+            </div>
+        </div>
+
+
+
+        <div class="code-container">
+            <button class="code-toggle" onclick="toggleCode('snippet2')">Game.cpp</button>
+            <div class="code-content" id="snippet2">
+                <pre>
+                    <code class="language-csharp">
+
+                        Game::Game()
+                            :window("GAME v1.0", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 720, 720)
+                        {
+                        }
+
+                        void Game::Init()
+                        {
+                            if (SDL_Init(SDL_INIT_EVERYTHING) == 0)
+                                isRunning = true;
+                            else
+                                isRunning = false;
+
+                            TTF_Init();
+
+                            SDL_ShowCursor(SDL_DISABLE);
+
+                            Texture::GetInstance().LoadTextures(window);
+                            AudioManager::GetInstance().Init();
+                            UIManager::GetInstance().SetRenderer(window.GetRenderer());
+                        }
+
+                        void Game::Update()
+                        {
+                            if (!UIManager::GetInstance().m_Exit)
+                                isRunning = true;
+                            else
+                                isRunning = false;
+
+                            SDL_GetMouseState(&mouseX, &mouseY);
+                            Texture::GetInstance().m_CursorWhite.SetPos(Vector2f(mouseX, mouseY));
+                            Texture::GetInstance().m_CursorRed.SetPos(Vector2f(mouseX, mouseY));
+
+                            Texture::GetInstance().Update();
+
+                            ObjectSpawner::GetInstance().Update();
+
+                            UIManager::GetInstance().Update();
+
+                            CheckCollision();
+
+                            srand(SDL_GetTicks());
+                        }
+
+                        void Game::CheckCollision()
+                        {
+                            std::vector<Enemy*> allEnemies;
+
+                            for (int i = 0; i < ObjectSpawner::GetInstance().GetSmallEnemies().size(); i++)
+                                allEnemies.push_back(&ObjectSpawner::GetInstance().GetSmallEnemies()[i]);
+
+                            for (int i = 0; i < ObjectSpawner::GetInstance().GetMediumEnemies().size(); i++)
+                                allEnemies.push_back(&ObjectSpawner::GetInstance().GetMediumEnemies()[i]);
+
+                            for (int i = 0; i < ObjectSpawner::GetInstance().GetBigEnemies().size(); i++)
+                                allEnemies.push_back(&ObjectSpawner::GetInstance().GetBigEnemies()[i]);
+                            
+                            //Collosion between FirstAid and player 
+                            if (Collision::IsCollide(&Texture::GetInstance().m_PlayerShip.GetDst(), &ObjectSpawner::GetInstance().GetFirstAid().GetDst())
+                                && !ObjectSpawner::GetInstance().GetFirstAid().IsDestroy()
+                                && !Texture::GetInstance().m_PlayerShip.IsDestroy())
+                            {
+                                AudioManager::GetInstance().PlaySoundEffect(AudioManager::GetInstance().m_FirstAid);
+                                Texture::GetInstance().m_PlayerShip.SetHitPoints(50);
+                                UIManager::GetInstance().ResetHealthBar();
+                                ObjectSpawner::GetInstance().GetFirstAid().Destroy();
+                            }
+
+                            //Collosion between Shield and player 
+                            if (Collision::IsCollide(&Texture::GetInstance().m_PlayerShip.GetDst(), &ObjectSpawner::GetInstance().GetShield().GetDst())
+                                && !ObjectSpawner::GetInstance().GetShield().IsDestroy()
+                                && !Texture::GetInstance().m_PlayerShip.IsDestroy())
+                            {
+                                AudioManager::GetInstance().PlaySoundEffect(AudioManager::GetInstance().m_Shield);
+                                Texture::GetInstance().m_PlayerShip.SetShield(20);
+                                UIManager::GetInstance().ResetShieldBar();
+                                ObjectSpawner::GetInstance().GetShield().Destroy();
+                            }
+
+                    </code>
+                </pre>
+            </div>
+        </div>
+
+        <br><h2>What I Learned</h2>
+        <p>While making this game I learned a lot of new things in C++ and SDL2. In C++ I learned more about inheritance, std::vector, static classes.</p>
+        <p>In SDL2 I learned about Renderer functions, SDL mixer for sound effects and SDL ttf for displying font.</p>
+        <p>And to solve errors and bugs I used Debugger and Breakpoints in Visual Studio.</p>
+        <!-- Add more paragraphs and headings as needed -->
+    </div>
+
+    <br><a href="https://github.com/Abhishek-dev-tech/2d-Plane-Shooter" class="bottombutton" target="_blank">Github Link</a>
+
+    <script src="prism.js"></script>
+
+    <script>
+        function toggleCode(snippetId) {
+            var codeSnippet = document.getElementById(snippetId);
+            codeSnippet.classList.toggle('active');
+        }
+    </script>
+
+</body>
+</html>

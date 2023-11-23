@@ -3,8 +3,9 @@
 # General
 --------------------------------------------------------------*/
 body {
-  font-family: "Open Sans", sans-serif;
+  font-family: 'Kanit', sans-serif;
   color: #272829;
+  background-color: rgb(230, 230, 230);
 }
 
 a {
@@ -18,7 +19,7 @@ a:hover {
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: "Raleway", sans-serif;
+  font-family: 'Kanit', sans-serif;
 }
 
 
@@ -29,7 +30,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .tab {
-  background-color: rgb(255, 255, 255); /* Darker background color on hover */
+  background-color: rgb(230, 230, 230); /* Darker background color on hover */
   border: 2px solid #838383; /* Border properties (adjust as needed) */
   color: #000000; /* Text color */
   padding: 10px 20px;
@@ -377,7 +378,7 @@ box-shadow: 0px 8px 12px rgba(0, 0, 0, 0.4);
 }
 .mobile-nav-active .mobile-nav-toggle {
   color: #fff;
-  background-color: #0563bb;
+  background-color: rgb(230, 230, 230);
 }
 
 /*--------------------------------------------------------------
@@ -415,7 +416,7 @@ box-shadow: 0px 8px 12px rgba(0, 0, 0, 0.4);
   color: #ffffff;
   margin: 15px 0 0 0;
   font-size: 26px;
-  font-family: "Poppins", sans-serif;
+    font-family: 'Kanit', sans-serif;
 }
 #hero p span {
   color: #f1f1f1;
@@ -505,6 +506,17 @@ section {
 /*--------------------------------------------------------------
 # About
 --------------------------------------------------------------*/
+
+.about{
+  background-color: rgb(230, 230, 230);
+}
+.Games{
+  background-color: rgb(230, 230, 230);
+}
+
+.contact{
+  background-color: rgb(230, 230, 230);
+}
 
 .about .content h3 {
   font-weight: 700;
@@ -688,20 +700,25 @@ text-decoration: underline;
   color: rgb(0, 0, 0);
 }
 
-.col-md-6 ul li {
-  margin-top: 20px;
+.col-md-6 a:hover {
+  text-decoration: underline;
 }
 
 .text-center {
   position: relative;
-  margin-top: 100px;
+  margin-top: 30px;
+  padding-bottom: 10px;
 
+}
+
+.text-centerr{
+  position: relative;
+  margin-top: 100px;
 }
 
 .text-center iframe {
 
   box-shadow: 0px 8px 12px rgba(0, 0, 0, 0.5);
-  margin-bottom: 30px;
 }
 .text-center img {
   box-shadow: 0px 8px 12px rgba(0, 0, 0, 0.5);
@@ -897,12 +914,12 @@ text-decoration: underline;
 .testimonials .swiper-pagination .swiper-pagination-bullet {
   width: 12px;
   height: 12px;
-  background-color: #fff;
+  background-color: rgb(230, 230, 230);
   opacity: 1;
   border: 1px solid #0563bb;
 }
 .testimonials .swiper-pagination .swiper-pagination-bullet-active {
-  background-color: #0563bb;
+  background-color:rgb(230, 230, 230);
 }
 @media (min-width: 992px) {
   .testimonials .testimonial-item p {
@@ -1070,12 +1087,13 @@ text-decoration: underline;
   font-size: 14px;
   text-align: center;
   padding: 30px 0;
+  background-color: rgb(230, 230, 230);
 }
 #footer h3 {
   font-size: 36px;
   font-weight: 700;
   position: relative;
-  font-family: "Poppins", sans-serif;
+  font-family: 'Kanit', sans-serif;
   padding: 0;
   margin: 0 0 15px 0;
 }

@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2D Multiplayer</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit&display=swap" rel="stylesheet">
+
+    <link href="assets/css/projects.css" rel="stylesheet">
+    <link rel="stylesheet" href="prism.css" />
+    <link href="assets/img/YRNA.png" rel="icon">
+</head>
+<body>
+
+    <div class="header-container">
+        <div class="head1">
+            <h1><a href="index.html" target="_blank">Abhishek Joshi</a></h1>
+            <p>Game Programmer</p>
+        </div>
+        <div class="head2">
+            <br><a href="Resume Abhishek Joshi.pdf" class="button"target="_blank">Resume</a>
+            <a href="https://github.com/Abhishek-dev-tech/2D-Multiplayer-Game" class="button" target="_blank">Github Link</a>
+        </div>
+    </div>
+
+    <div id="video-container">
+        <video id="project-video" controls>
+            <!-- Add your video source here -->
+            <source src="assets/videos/Multiplayer_Trim.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+
+    </div>
+    <h2>2D Multiplayer</h2>
+    <div class="column-container">
+        <div class="column">
+            <h2>About</h2>
+            <p>This is a 2d multiplayer game where you and your teammate have to survive from enemies. </p>
+        </div>
+        <div class="column">
+            <h2>Project Info</h2>
+            <ul>
+            <li>Role: Game Programming</li>
+            <li>Team Size: 1</li>
+            <li>Time Frame: 4 weeks</li>
+            <li>Engine: Unity Engine</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="paragraph-container">
+        <h2>My Role</h2>
+        <p>This was my first multiplayer game. For multiplayer Networking, I used <b>Photon PUN</b> with Unity.</p>
+        <p>In this game both players are using <b>Photon View</b> and <b>Photon transform View</b> components that are responsible for Syncing the player movement and shooting through the network. For player shooting it is using a <b>RPC</b> function called <b>RPC_Shoot</b> that sending bulletAngle and _desiredBulletSpread as a parameter.</p>
+        <p>And FollowEnemy, ShootEnemy and LaserEnemy are inherited from <b>EnemyController</b> class in order to work. All the enemies are using Photon View.</p>
+
+        <br><h2>Code snippets</h2>
+
+        <div class="code-container">
+            <button class="code-toggle" onclick="toggleCode('snippet1')">PlayerMovement.cs</button>
+            <div class="code-content" id="snippet1">
+                <pre>
+                    <code class="language-csharp">
+
+                        
+                        private void Move()
+                        {
+                            transform.position += (Vector3)moveDirection * speed * Time.deltaTime;
+
+                            transform.rotation = Quaternion.Euler(0, 0, -moveDirection.x * rotateAngle);
+                        }
+
+                        private void Shoot()
+                        {
+                            float desiredBulletSpread = UnityEngine.Random.Range(-bulletSpread, bulletSpread);
+
+                            cameraShake.TriggerShake(0.15f, 0.15f);
+
+                            view.RPC("RPC_Shoot", RpcTarget.All, GetBulletAngle(), desiredBulletSpread);
+                        }
+
+                        [PunRPC]
+                        private void RPC_Shoot(float bulletAngle, float _desiredBulletSpread)
+                        {
+                            GameObject tempBullet = ObjectPool.instance.GetBullets();
+
+                            if (!tempBullet) return;
+
+                            tempBullet.GetComponent<Bullet>().bulletParent = BulletParent.Player;
+
+                            popUp.Popup();
+
+                            AudioManager.instance.PlaySoundEffect("Shooting");
+
+                            tempBullet.transform.position = transform.position;
+
+                            tempBullet.SetActive(true);
+
+                            tempBullet.GetComponent<Bullet>().Init(bulletSpeed, _desiredBulletSpread, bulletAngle);
+                            
+                        }
+
+                        public void TakeDamage(float value)
+                        {
+                            Health -= value;
+
+                            if(view.IsMine)
+                                UIManager.instance.UpdateHealthBar(Health);
+
+                            popUp.Popup();
+
+                            if (Health <= 0) Die();
+                            else AudioManager.instance.PlaySoundEffect("Hit");
+                        }
+
+                        private void Die()
+                        {
+                            view.RPC("RPC_Die", RpcTarget.All);
+                        }
+
+                        [PunRPC]
+                        public void RPC_Die()
+                        {
+                            AudioManager.instance.PlaySoundEffect("Die");
+
+                            GameManager.instance.GameOver();
+                            UIManager.instance.GameOver();
+                        }
+
+                    </code>
+                </pre>
+            </div>
+        </div>
+
+
+
+        <div class="code-container">
+            <button class="code-toggle" onclick="toggleCode('snippet2')">EnemyController.cs</button>
+            <div class="code-content" id="snippet2">
+                <pre>
+                    <code class="language-csharp">
+
+                        
+                    public void Die()
+                    {
+                        view.RPC("RPC_Die", RpcTarget.All);
+                    }
+
+                    [PunRPC]
+                    public void RPC_Die()
+                    {
+                        if (once >= 1)
+                            return;
+
+                        once++;
+
+                        UIManager.instance.AddScore(50);
+
+                        cameraShake.TriggerShake(0.2f, 0.35f);
+
+                        AudioManager.instance.PlaySoundEffect("Die");
+
+                        gameObject.SetActive(false);
+
+                        GameObject deathParticle = ObjectPool.instance.GetDeathParticle();
+
+                        if (deathParticle)
+                        {
+                            deathParticle.transform.position = transform.position;
+                            deathParticle.GetComponent<ParticleSystem>().Play();
+                        }
+                    }
+
+                    public  void TakeDamage(float value)
+                    {
+                        Health -= value;
+
+                        spriteRenderer.color = Color.white;
+
+                        popUp.Popup();
+
+                        Invoke("ResetColor", 0.075f);
+
+                        if (Health <= 0) Die();
+                        else AudioManager.instance.PlaySoundEffect("Hit");
+
+                    }
+
+                    public void SendInfo(bool active, Vector3 pos)
+                    {
+                        view.RPC("RPC_SendInfo", RpcTarget.AllBuffered, active, pos);
+                    }
+
+                    [PunRPC]
+                    public void RPC_SendInfo(bool active, Vector3 pos)
+                    {
+                        gameObject.SetActive(active);
+                        transform.position = pos;
+                    }
+
+                    public void ResetInfo()
+                    {
+                        view.RPC("RPC_ResetInfo", RpcTarget.AllBuffered);
+                    }
+
+                    [PunRPC]
+                    public void RPC_ResetInfo()
+                    {
+                        Health = maxHealth;
+                        once = 0;
+                    }
+
+                    </code>
+                </pre>
+            </div>
+        </div>
+
+        <br><h2>What I Learned</h2>
+        <p>This was my first multiplayer game and I learned a lot about <b>Photon</b> and multiplayer Networking.</p>
+        <p>Talking about photon I learned about <b>Photon View</b> and <b>Photon transform View</b> components and how they works with gameObjects. Learned about RPC (Remote Procedure Calls) functions, like to send any information to all clients or masterclient.</p>
+
+        <!-- Add more paragraphs and headings as needed -->
+
+        
+
+    </div>
+
+    <br><a href="https://github.com/Abhishek-dev-tech/2D-Multiplayer-Game" class="bottombutton" target="_blank">Github Link</a>
+
+    <script src="prism.js"></script>
+
+    <script>
+        function toggleCode(snippetId) {
+            var codeSnippet = document.getElementById(snippetId);
+            codeSnippet.classList.toggle('active');
+        }
+    </script>
+
+</body>
+</html>
