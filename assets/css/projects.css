@@ -1,68 +1,72 @@
+:root {
+    --font-family: 'Kanit', sans-serif;
+    --text-color: rgb(54, 54, 54);
+    --bg-color: rgb(230, 230, 230);
+    --bg-light: rgb(215, 215, 215);
+    --bg-hover: rgb(200, 200, 200);
+    --column-bg: rgb(214, 214, 214);
+    --shadow-light: 0 4px 8px rgba(0, 0, 0, 0.1);
+    --border-radius: 5px;
+    --transition-speed: 0.3s;
+}
+
 body {
-    font-family: 'Kanit', sans-serif;
+    font-family: var(--font-family);
     margin: 30px auto;
     max-width: 1200px;
     padding: 0;
     text-align: center;
-    background-color: rgb(230, 230, 230);
-    color: rgb(54, 54, 54);
+    background-color: var(--bg-color);
+    color: var(--text-color);
 }
 
-.header-container{
+.header-container {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin: 20px 0;
 }
 
-.head1{
+.head1 {
     text-align: left;
 }
 
-.head1 h1 a{
+.head1 h1 a {
     margin: 0;
 }
 
+.button,
+.bottombutton {
+    display: inline-block;
+    color: var(--text-color);
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    border: 2px solid var(--text-color);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-light);
+    background-color: var(--bg-light);
+    transition: background-color var(--transition-speed) ease;
+}
+
 .button {
-    display: inline-block;
     padding: 5px 10px;
-    color: rgb(54, 54, 54);
-    text-align: center;
-    text-decoration: none;
     font-size: 15px;
-    cursor: pointer;
-    border: 2px solid rgb(54, 54, 54);
-    border-radius: 5px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    background-color: rgb(215, 215, 215);
 }
 
-.button:hover{
-    background-color: rgb(200, 200, 200);
-}
-
-.bottombutton{
-    display: inline-block;
+.bottombutton {
     padding: 10px 20px;
-    color: rgb(54, 54, 54);
-    text-align: center;
-    text-decoration: none;
     font-size: 16px;
-    cursor: pointer;
-    border: 2px solid rgb(54, 54, 54);
-    border-radius: 5px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    background-color: rgb(215, 215, 215);
-    align-items: center;
 }
 
-.bottombutton:hover{
-    background-color: rgb(200, 200, 200);
+.button:hover,
+.bottombutton:hover {
+    background-color: var(--bg-hover);
 }
 
 a {
     text-decoration: none;
-    color: rgb(54, 54, 54);
+    color: var(--text-color);
     margin: 0 15px;
 }
 
@@ -70,13 +74,13 @@ a {
 #video-container {
     margin-top: 20px;
     max-width: 100%;
-    overflow: hidden; /* Ensure the video does not overflow its container */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    box-shadow: var(--shadow-light);
     position: relative;
 }
 
 #project-video {
-    width: 100%; /* Make the video width 100% of its container */
+    width: 100%;
 }
 
 .column-container {
@@ -87,24 +91,21 @@ a {
 
 .column {
     width: 48%;
-    background-color: rgb(214, 214, 214);
+    background-color: var(--column-bg);
     color: rgb(39, 39, 39);
-    border-radius: 5px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-light);
 }
 
-.column p , h2{
-
+.column p,
+.column h2 {
     text-align: justify;
-
     margin: 20px;
     margin-top: 15px;
 }
 
-.column li{
-
+.column li {
     text-align: left;
-
     margin: 10px;
     margin-top: 5px;
 }
@@ -128,7 +129,7 @@ a {
 
 .code-container {
     margin: 10px 0;
-    border: 1px solid rgb(230, 230, 230);
+    border: 1px solid var(--bg-color);
     border-radius: 4px;
 }
 
@@ -136,31 +137,30 @@ a {
     color: aliceblue;
     overflow-x: auto;
     max-height: 0;
-    transition: max-height 0.5s;
+    transition: max-height 0.5s ease;
 }
 
-
 .code-content.active {
-    max-height: 100vh; /* Adjust the max height as needed */
+    max-height: 100vh;
 }
 
 .code-toggle {
-    border: 4px;
+    border: none;
     padding: 10px;
     cursor: pointer;
     text-align: left;
     background-color: #4e4e4e;
-    color:rgb(233, 233, 233);
+    color: rgb(233, 233, 233);
     width: 100%;
     font-size: 15px;
     border-radius: 4px;
-    font-family: 'Kanit', sans-serif;
+    font-family: var(--font-family);
+    transition: color var(--transition-speed) ease;
 }
 
 .code-toggle:hover {
-    color:rgb(255, 255, 255);
+    color: #fff;
     text-decoration: underline;
-
 }
 
 .gamelink{
