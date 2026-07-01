@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gro - Abhishek Joshi</title>
+    <meta name="description" content="GRO - A fantasy farming sandbox VR game on Meta Quest. Plant, grow, and harvest mutated fruits in a cozy multiplayer garden.">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="assets/css/projects.css">
+    <link rel="icon" href="assets/img/YRNA.png">
+</head>
+<body>
+    <div class="header-container">
+        <div class="head1">
+            <h1><a href="index.html" target="_blank">Abhishek Joshi</a></h1>
+            <p>Game Programmer</p>
+        </div>
+        <div class="head2">
+            <br><a href="Resume.pdf" class="button"target="_blank">Resume</a>
+        </div>
+    </div>
+
+    <div id="video-container">
+        <img id="project-video" src="assets/gif/Gro.gif" loading="lazy" alt="Gro gameplay">
+    </div>
+    <h2>Gro</h2>
+    <div class="column-container">
+        <div class="column column-full">
+            <h2>About</h2>
+            <p>GRO is a VR farming game on Meta Quest. You grow plants during the day and defend your garden at night. You can play alone or with friends.</p>
+            <p>Start with small seeds and grow big, strange fruits. Rain, tornados, and other weather can change your plants in new ways. You can mix those changes to grow even rarer plants. At night, creatures attack your garden, so you fight them off with friends. You also get tools like watering cans, sprinklers, and outfits to build the garden you want.</p>
+        </div>
+    </div>
+
+    <div class="paragraph-container">
+        <h2>My Role</h2>
+        <p>I helped <b>re-structure one of the core gameplay codebases</b> so the game could grow over time. The goal was better scalability — making it easier to add new features without breaking old systems or slowing the team down.</p>
+        <p>A big part of my work was <b>VR optimization</b>. I used techniques like <b>distance-based culling</b> and <b>frustum culling</b> so the game did not waste effort on things far away or outside the player's view. This was not only on the visual side. I also added <b>code-level skipping</b> using an area-of-interest style approach — if a player was not looking at something or did not need it right then, the game could skip updating it.</p>
+        <p>I worked closely with <b>backend engineers</b> on live game services. I integrated <b>PlayFab</b> and worked with the backend team on <b>Azure Functions</b> to connect the game client with server-side logic, data, and online features.</p>
+
+        <br><h2>What I Learned</h2>
+        <p>Through this project I learned a lot more about <b>optimization</b>, especially when a game needs to support more players, more farms and gardens, and more plants per player at the same time. Every extra plant and every extra player adds cost, so you have to think carefully about what runs every frame.</p>
+        <p>I worked closely with the <b>technical art team</b> while doing these optimizations. We balanced visual quality with performance — deciding what should be fully detailed, what could be simplified, and what could be turned off when players were not nearby or not paying attention to it.</p>
+        <p>That teamwork helped me understand that good VR performance is a shared job between programming, art, and design. Clear communication made it easier to find the right trade-offs and ship a game that still looks great while running smoothly on Quest hardware.</p>
+        <p>I also learned that it helps to <b>make a plan and talk with other developers</b> before jumping into a feature. When you discuss the idea early, everyone can share their own point of view and spot problems you might miss on your own. That simple step can cut down a lot of edge cases, bugs, and surprises later in development.</p>
+
+        <div class="gamelink">
+            <a href="https://www.meta.com/en-gb/experiences/gro/24696055850016802/" class="button bottombutton" target="_blank">View on Meta Quest</a>
+        </div>
+    </div>
+
+</body>
+</html>

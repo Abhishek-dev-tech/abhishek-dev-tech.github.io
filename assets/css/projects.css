@@ -83,6 +83,13 @@ a {
     width: 100%;
 }
 
+#video-container iframe,
+iframe#project-video {
+    aspect-ratio: 16 / 9;
+    height: auto;
+    border: 0;
+}
+
 .column-container {
     display: flex;
     justify-content: space-around;
@@ -95,6 +102,10 @@ a {
     color: rgb(39, 39, 39);
     border-radius: var(--border-radius);
     box-shadow: var(--shadow-light);
+}
+
+.column-full {
+    width: 100%;
 }
 
 .column p,
